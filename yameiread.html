@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亚美阅读 - 发现文字之美</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0071e3;
+            --dark-bg: #1d1d1f;
+            --light-bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --success: #34c759;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+        
+        /* 导航栏样式 */
+        nav {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+        
+        /* 头部区域 */
+        .hero {
+            padding: 140px 10% 80px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(245,245,247,1)), 
+                        url('https://images.unsplash.com/photo-1495640388908-05fa85288e61?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center/cover;
+        }
+        
+        .hero h1 {
+            font-size: 60px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        .hero p {
+            font-size: 24px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        
+        /* 文章展示区域 */
+        .section-title {
+            text-align: center;
+            margin: 80px 0 40px;
+            font-size: 40px;
+            font-weight: 600;
+        }
+        
+        .articles-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 0 5% 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .article-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .article-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .article-content {
+            padding: 25px;
+        }
+        
+        .article-category {
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .article-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .article-excerpt {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 上传表单区域 */
+        .upload-section {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 100px 5%;
+            text-align: center;
+        }
+        
+        .upload-section h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-section p {
+            color: #a1a1a6;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 18px;
+        }
+        
+        .upload-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 40px;
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 16px;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #0077ed;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: var(--light-bg);
+            padding: 60px 5% 40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 40px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .articles-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">亚美阅读</div>
+        <div class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">发现</a>
+            <a href="#">分类</a>
+            <a href="#">作者</a>
+            <a href="#">关于</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn btn-outline">登录</button>
+            <button class="btn btn-primary">注册</button>
+        </div>
+    </nav>
+
+    <!-- 头部区域 -->
+    <section class="hero">
+        <h1>发现文字之美</h1>
+        <p>亚美阅读为您精选优质文章，提供沉浸式阅读体验，让每个字都触动心灵</p>
+        <button class="btn btn-primary">开始阅读</button>
+    </section>
+
+    <!-- 精选文章 -->
+    <h2 class="section-title">精选文章</h2>
+    <div class="articles-container">
+        <!-- 文章卡片 1 -->
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="文章封面" class="article-image">
+            <div class="article-content">
+                <div class="article-category">文学</div>
+                <h3 class="article-title">城市之光：现代都市中的人文情怀</h3>
+                <p class="article-excerpt">在钢筋水泥的丛林中，我们如何寻找人性的温度？本文探讨现代都市生活中的情感连接...</p>
+                <div class="article-meta">
+                    <span>李思远</span>
+                    <span>2023-10-15</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文章卡片 2 -->
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="文章封面" class="article-image">
+            <div class="article-content">
+                <div class="article-category">科技</div>
+                <h3 class="article-title">AI时代的文学创作：机遇与挑战</h3>
+                <p class="article-excerpt">人工智能正在改变创作领域，传统作家如何在这个变革中找到自己的位置？...</p>
+                <div class="article-meta">
+                    <span>王明哲</span>
+                    <span>2023-10-12</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文章卡片 3 -->
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="文章封面" class="article-image">
+            <div class="article-content">
+                <div class="article-category">旅行</div>
+                <h3 class="article-title">沿着丝绸之路：一段跨越时空的旅程</h3>
+                <p class="article-excerpt">从西安到伊斯坦布尔，追寻古代商队的足迹，感受不同文明的交融与碰撞...</p>
+                <div class="article-meta">
+                    <span>张雨薇</span>
+                    <span>2023-10-08</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 文章卡片 4 -->
+        <div class="article-card">
+            <img src="https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="文章封面" class="article-image">
+            <div class="article-content">
+                <div class="article-category">哲学</div>
+                <h3 class="article-title">存在与虚无：现代人的精神困境</h3>
+                <p class="article-excerpt">在物质丰富的时代，我们为何依然感到空虚？探索存在主义哲学对现代生活的启示...</p>
+                <div class="article-meta">
+                    <span>陈思宇</span>
+                    <span>2023-10-05</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上传文章区域 -->
+    <section class="upload-section">
+        <h2>分享你的故事</h2>
+        <p>成为亚美阅读的作者，与全球读者分享你的见解与创作</p>
+        
+        <div class="upload-form">
+            <div class="form-group">
+                <label for="article-title">文章标题</label>
+                <input type="text" id="article-title" class="form-control" placeholder="输入标题...">
+            </div>
+            
+            <div class="form-group">
+                <label for="article-category">分类</label>
+                <select id="article-category" class="form-control">
+                    <option value="">选择分类</option>
+                    <option value="literature">文学</option>
+                    <option value="technology">科技</option>
+                    <option value="travel">旅行</option>
+                    <option value="philosophy">哲学</option>
+                    <option value="art">艺术</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-content">文章内容</label>
+                <textarea id="article-content" class="form-control" placeholder="输入文章内容..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="article-image">封面图片</label>
+                <input type="file" id="article-image" class="form-control">
+            </div>
+            
+            <button class="submit-btn" onclick="uploadArticle()">发布文章</button>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>亚美阅读</h3>
+                <ul class="footer-links">
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">团队介绍</a></li>
+                    <li><a href="#">加入我们</a></li>
+                    <li><a href="#">联系方式</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>发现</h3>
+                <ul class="footer-links">
+                    <li><a href="#">热门文章</a></li>
+                    <li><a href="#">编辑推荐</a></li>
+                    <li><a href="#">新锐作者</a></li>
+                    <li><a href="#">专题合集</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>帮助</h3>
+                <ul class="footer-links">
+                    <li><a href="#">常见问题</a></li>
+                    <li><a href="#">投稿指南</a></li>
+                    <li><a href="#">版权声明</a></li>
+                    <li><a href="#">隐私政策</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>关注我们</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-weibo"></i> 微博</a></li>
+                    <li><a href="#"><i class="fab fa-weixin"></i> 微信</a></li>
+                    <li><a href="#"><i class="fab fa-zhihu"></i> 知乎</a></li>
+                    <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 亚美阅读. 保留所有权利。
+        </div>
+    </footer>
+
+    <script>
+        // 文章上传功能（前端模拟）
+        function uploadArticle() {
+            const title = document.getElementById('article-title').value;
+            const category = document.getElementById('article-category').value;
+            const content = document.getElementById('article-content').value;
+            
+            if (!title || !category || !content) {
+                alert('请填写所有必填字段');
+                return;
+            }
+            
+            // 模拟上传成功
+            alert(`文章"${title}"上传成功！待管理员审核后将会发布。`);
+            
+            // 清空表单
+            document.getElementById('article-title').value = '';
+            document.getElementById('article-category').value = '';
+            document.getElementById('article-content').value = '';
+            document.getElementById('article-image').value = '';
+        }
+        
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+            } else {
+                nav.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
